@@ -1,5 +1,7 @@
 ﻿using Dapper;
+using FluentMigrator;
 using FluentMigrator.Runner;
+using FluentMigrator.Runner.Initialization;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data.SqlClient;
 
@@ -40,6 +42,7 @@ namespace DatabaseMigrations.SqlServer
             return new ServiceCollection()
                 // Add common FluentMigrator services
                 .AddFluentMigratorCore()
+                .Configure<AssemblySourceOptions>(x => x.AssemblyNames = new[] { typeof(Program).Assembly.GetName().Name })
                 .ConfigureRunner(rb => rb
                     // Add SqlServer support to FluentMigrator
                     .AddSqlServer()

@@ -19,7 +19,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "Presentation\WebA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{2DBC9A18-BAB2-4774-8AF9-3C3D26D75D55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrations", "Infrastructure\Persistence\FluentMigrator\DatabaseMigrations.csproj", "{4377090B-D32E-4EFE-A0F5-73F003CA118C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrations", "Infrastructure\Persistence\FluentMigrator\DatabaseMigrations.csproj", "{4377090B-D32E-4EFE-A0F5-73F003CA118C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayerSqlClient", "Infrastructure\Persistence\DataAccessLayerSqlClient\DataAccessLayerSqlClient.csproj", "{455170B7-3E9C-44D3-9A75-CDE178201F92}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayerSqlClientTests", "Infrastructure\Persistence\DataAccessLayerSqlClientTests\DataAccessLayerSqlClientTests.csproj", "{EAA888FD-B34E-4315-825C-FAE8B4C3D236}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CategoryService", "CategoryService", "{C22BA964-BE34-4D85-BA62-E08EAB660603}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CategoryProvider", "Infrastructure\CategoryProvider\CategoryProvider.csproj", "{360F9924-B4BA-4172-9144-3DB807B2F83E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +51,18 @@ Global
 		{4377090B-D32E-4EFE-A0F5-73F003CA118C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4377090B-D32E-4EFE-A0F5-73F003CA118C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4377090B-D32E-4EFE-A0F5-73F003CA118C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{455170B7-3E9C-44D3-9A75-CDE178201F92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{455170B7-3E9C-44D3-9A75-CDE178201F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{455170B7-3E9C-44D3-9A75-CDE178201F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{455170B7-3E9C-44D3-9A75-CDE178201F92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAA888FD-B34E-4315-825C-FAE8B4C3D236}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAA888FD-B34E-4315-825C-FAE8B4C3D236}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAA888FD-B34E-4315-825C-FAE8B4C3D236}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAA888FD-B34E-4315-825C-FAE8B4C3D236}.Release|Any CPU.Build.0 = Release|Any CPU
+		{360F9924-B4BA-4172-9144-3DB807B2F83E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{360F9924-B4BA-4172-9144-3DB807B2F83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{360F9924-B4BA-4172-9144-3DB807B2F83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{360F9924-B4BA-4172-9144-3DB807B2F83E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +73,10 @@ Global
 		{5BB0B493-F938-4A4B-A504-343101C556CA} = {EB680671-239C-4BF5-B588-4A268D67ED14}
 		{2DBC9A18-BAB2-4774-8AF9-3C3D26D75D55} = {A1E6C62E-B0F4-4A0A-8B2E-4FE560D3F65E}
 		{4377090B-D32E-4EFE-A0F5-73F003CA118C} = {2DBC9A18-BAB2-4774-8AF9-3C3D26D75D55}
+		{455170B7-3E9C-44D3-9A75-CDE178201F92} = {2DBC9A18-BAB2-4774-8AF9-3C3D26D75D55}
+		{EAA888FD-B34E-4315-825C-FAE8B4C3D236} = {2DBC9A18-BAB2-4774-8AF9-3C3D26D75D55}
+		{C22BA964-BE34-4D85-BA62-E08EAB660603} = {A1E6C62E-B0F4-4A0A-8B2E-4FE560D3F65E}
+		{360F9924-B4BA-4172-9144-3DB807B2F83E} = {C22BA964-BE34-4D85-BA62-E08EAB660603}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0562387C-C760-49ED-9A93-9B3EB234F2EB}
