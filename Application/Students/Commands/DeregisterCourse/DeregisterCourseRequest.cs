@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Students.Dtos;
+using MediatR;
 
 namespace Application.Students.Commands.RegisterCourse
 {
-    internal class DeregisterCourseRequest
+    public class DeregisterCourseRequest : IRequest<Unit>
     {
+        public DeregisterCourseRequest(int studentId,DeregisterCourseDto deregisterCourseDto)
+        {
+            StudentId = studentId;
+            DeregisterCourseDto = deregisterCourseDto;
+        }
+
+        public int StudentId { get; }
+        public DeregisterCourseDto DeregisterCourseDto { get; }
     }
 }

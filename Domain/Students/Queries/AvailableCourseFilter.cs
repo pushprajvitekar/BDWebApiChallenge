@@ -1,6 +1,6 @@
 ﻿namespace Domain.Students.Queries
 {
-    public class StudentCourseFilter
+    public class AvailableCourseFilter
     {
         public int? CourseId { get; set; }
         public int? CategoryId { get; set; }

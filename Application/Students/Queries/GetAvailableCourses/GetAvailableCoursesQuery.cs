@@ -8,14 +8,14 @@ namespace Application.Students.Queries.GetAvailableCourses
 {
     public class GetAvailableCoursesQuery : IRequest<IEnumerable<StudentCourseDto>>
     {
-        public GetAvailableCoursesQuery( StudentCourseFilter? courseFilter, SortingPaging? sortingPaging)
+        public GetAvailableCoursesQuery( AvailableCourseFilter? courseFilter, SortingPaging? sortingPaging)
         {
             CourseFilter = courseFilter;
             SortingPaging = sortingPaging;
         }
 
         public int CourseMasterId { get; }
-        public StudentCourseFilter? CourseFilter { get; }
+        public AvailableCourseFilter? CourseFilter { get; }
         public SortingPaging? SortingPaging { get; }
     }
 }

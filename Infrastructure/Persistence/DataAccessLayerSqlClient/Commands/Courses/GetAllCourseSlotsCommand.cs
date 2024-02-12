@@ -123,11 +123,11 @@ namespace DataAccessLayerSqlClient.Commands.Courses
         {
             var courseId = Convert.ToInt32(reader[nameof(Course.Id)]);
             var courseMasterId = Convert.ToInt32(reader["CourseMasterId"]);
-            var courseName = Convert.ToString(reader["Name"]) ?? "Unknown";
+            var courseName = Convert.ToString(reader["Name"]) ?? Constants.Unknown;
             var courseDesc = Convert.ToString(reader["Description"]);
             var categoryName = Convert.ToString(reader["CourseCategoryName"]);
             var categoryId = Convert.ToInt32(reader["CourseCategoryId"]);
-            var category = new CourseCategory(categoryId, categoryName ?? "Unknown");
+            var category = new CourseCategory(categoryId, categoryName ?? Constants.Unknown);
             var courseMaster = new CourseMaster(courseMasterId, courseName, courseCategory: category, description: courseDesc);
             var startDate = Convert.ToDateTime(reader["StartDate"]);
             var endDate = Convert.ToDateTime(reader["EndDate"]);

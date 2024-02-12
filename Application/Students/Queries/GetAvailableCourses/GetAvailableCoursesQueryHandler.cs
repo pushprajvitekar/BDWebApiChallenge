@@ -1,5 +1,4 @@
-﻿using Application.Courses.Dtos;
-using Application.Students.Dtos;
+﻿using Application.Students.Dtos;
 using Domain.Students;
 using MediatR;
 

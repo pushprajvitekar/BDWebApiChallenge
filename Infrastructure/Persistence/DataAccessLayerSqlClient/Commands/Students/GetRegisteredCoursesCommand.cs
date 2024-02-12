@@ -7,13 +7,15 @@ using System.Text;
 
 namespace DataAccessLayerSqlClient.Commands.Students
 {
-    internal class GetAvailableCoursesCommand : GetPagedResultsCommand<Course>
+    internal class GetRegisteredCoursesCommand : GetPagedResultsCommand<CourseRegistration>
     {
-        private readonly AvailableCourseFilter? filter;
+        private readonly int studentId;
+        private readonly RegisteredCourseFilter? filter;
 
-        public GetAvailableCoursesCommand(AvailableCourseFilter? studentCourseFilter, SortingPaging? sortingPaging = null) : base(sortingPaging)
+        public GetRegisteredCoursesCommand(int studentId, RegisteredCourseFilter? registeredCourseFilter, SortingPaging? sortingPaging = null) : base(sortingPaging)
         {
-            this.filter = studentCourseFilter;
+            this.studentId = studentId;
+            this.filter = registeredCourseFilter;
             SetParameters();
         }
 
@@ -24,6 +26,7 @@ namespace DataAccessLayerSqlClient.Commands.Students
                 var sb = new StringBuilder();
                 sb.AppendLine(@"SELECT 
                                [Id]
+                              ,[CourseId]  
                               ,[CourseMasterId] 
                               ,[Name]
                               ,[Description]
@@ -33,10 +36,13 @@ namespace DataAccessLayerSqlClient.Commands.Students
                               ,[RegistrationEndDate]
                               ,[StartDate]
                               ,[EndDate]
-                              ,[Capacity]
-                              ,[Registrations]"
+                              ,[StudentId]
+                              ,[RegisteredBy]
+                              ,[RegistrationDate]
+                             "
                              );
-                sb.AppendLine("FROM [dbo].[vw_AvailableCourses]");
+                sb.AppendLine("FROM [dbo].[vw_RegisteredCourses]");
+             
                 return sb.ToString();
             }
         }
@@ -44,32 +50,40 @@ namespace DataAccessLayerSqlClient.Commands.Students
         {
             if (filter == null) return string.Empty;
             var sb = new StringBuilder();
+            sb.AppendLine("WHERE StudentId = @StudentId");
+            if (filter.Id != null && filter.Id > 0)
+            {
+                sb.AppendLine("AND");
+                sb.AppendLine($"Id = @{nameof(filter.Id)}");
+                return $"{sb}";
+            }
             if (filter.CourseId != null && filter.CourseId > 0)
             {
-                sb.AppendLine($"Id = @{nameof(filter.CourseId)}");
-                return $"WHERE {sb}";
+                sb.AppendLine("AND");
+                sb.AppendLine($"CourseId = @{nameof(filter.CourseId)}");
             }
             if (filter.CategoryId != null && filter.CategoryId > 0)
             {
+                sb.AppendLine("AND");
                 sb.AppendLine($"CourseCategoryId = @{nameof(filter.CategoryId)}");
             }
             if (!string.IsNullOrEmpty(filter.Name))
             {
-                if (sb.Length > 0) { sb.AppendLine("AND"); }
+                sb.AppendLine("AND");
                 sb.AppendLine($"Name LIKE '%' + @{nameof(filter.Name)} + '%'");
             }
             if (filter.StartDate != null)
             {
-                if (sb.Length > 0) { sb.AppendLine("AND"); }
+                sb.AppendLine("AND");
                 sb.AppendLine($"StartDate = @{nameof(filter.StartDate)}");
             }
             if (filter.EndDate != null)
             {
-                if (sb.Length > 0) { sb.AppendLine("AND"); }
+                sb.AppendLine("AND");
                 sb.AppendLine($"EndDate = @{nameof(filter.EndDate)}");
             }
 
-            if (sb.Length > 0) { return $"WHERE {sb}"; } else return string.Empty;
+            if (sb.Length > 0) { return $"{sb}"; } else return string.Empty;
         }
 
         protected override IEnumerable<KeyValuePair<string, object>> GetFilterParameters()
@@ -78,10 +92,16 @@ namespace DataAccessLayerSqlClient.Commands.Students
             var dictionary = new Dictionary<string, object>();
             if (filter != null)
             {
+                dictionary.Add($"@StudentId", studentId);
+                if (filter.Id != null && filter.Id > 0)
+                {
+                    dictionary.Add($"@{nameof(filter.Id)}", filter.Id);
+                    return dictionary.ToList();
+                }
+
                 if (filter.CourseId != null && filter.CourseId > 0)
                 {
                     dictionary.Add($"@{nameof(filter.CourseId)}", filter.CourseId);
-                    return dictionary.ToList();
                 }
                 if (filter.CategoryId != null && filter.CategoryId > 0)
                 {
@@ -105,9 +125,10 @@ namespace DataAccessLayerSqlClient.Commands.Students
             return dictionary.ToList();
 
         }
-        protected override Course Transform(IDataReader reader)
+        protected override CourseRegistration Transform(IDataReader reader)
         {
-            var courseId = Convert.ToInt32(reader[nameof(Course.Id)]);
+            var courseRegId = Convert.ToInt32(reader[nameof(CourseRegistration.Id)]);
+            var courseId = Convert.ToInt32(reader["CourseId"]);
             var courseMasterId = Convert.ToInt32(reader["CourseMasterId"]);
             var courseName = Convert.ToString(reader["Name"]) ?? Constants.Unknown;
             var courseDesc = Convert.ToString(reader["Description"]);
@@ -119,11 +140,12 @@ namespace DataAccessLayerSqlClient.Commands.Students
             var endDate = Convert.ToDateTime(reader["EndDate"]);
             var regstartDate = Convert.ToDateTime(reader["RegistrationStartDate"]);
             var regendDate = Convert.ToDateTime(reader["RegistrationEndDate"]);
-            var capacity = Convert.ToInt32(reader["Capacity"]);
-            var registrations = Convert.ToInt32(reader["Registrations"]);
-            var c = new Course(id: courseId, courseMaster: courseMaster, regstartDate, regendDate, startDate, endDate, capacity);
-            c.CalaculateRemainingPlaces(registrations);
-            return c;
+            var studentId = Convert.ToInt32(reader["StudentId"]);
+            var regBy = Convert.ToString(reader["RegisteredBy"]) ?? Constants.Unknown;
+            var regDate = Convert.ToDateTime(reader["RegistrationDate"]);
+            var c = new Course(id: courseId, courseMaster: courseMaster, regstartDate, regendDate, startDate, endDate, 0);
+            var cr = new CourseRegistration(courseRegId, c, studentId, regBy, regDate);
+            return cr;
         }
     }
 }

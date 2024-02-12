@@ -47,6 +47,17 @@ namespace DataAccessLayerSqlClient.Common
             connection.Open();
             return command.ExecuteScalar();
         }
-
+        public static int ExecuteNonQuery(Func<SqlConnection, SqlCommand> cmdFnc,
+                   string connectionString,
+                   IDictionary<string, object>? parameters = null,
+                   CommandType cmdType = CommandType.Text)
+        {
+            using var connection = new SqlConnection(connectionString);
+            using var command = cmdFnc(connection);
+            command.CommandType = cmdType;
+            AddParameters(command, parameters);
+            connection.Open();
+            return command.ExecuteNonQuery();
+        }
     }
 }

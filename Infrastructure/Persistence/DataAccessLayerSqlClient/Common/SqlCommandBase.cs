@@ -31,7 +31,11 @@ namespace DataAccessLayerSqlClient.Common
         {
             return SqlCommandExecutor.ExecuteReader(Command, connString, Transform, Parameters, CommandType);
         }
-
+        internal int ExecuteNonQuery(string connString)
+        {
+            var res = SqlCommandExecutor.ExecuteNonQuery(Command, connString, Parameters, CommandType);
+            return res;
+        }
 
     }
 }

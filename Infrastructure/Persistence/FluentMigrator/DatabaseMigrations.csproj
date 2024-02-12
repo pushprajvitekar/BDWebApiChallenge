@@ -8,11 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\M202402112300_StudentCourseTables.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Migrations\M202402111800_AddCourseStoredProcsAndViews.sql" />
+    <None Remove="Migrations\M202402121830_AvailableCoursesView.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Migrations\M202402111800_AddCourseStoredProcsAndViews.sql" />
+    <EmbeddedResource Include="Migrations\M202402121830_AvailableCoursesView.sql" />
   </ItemGroup>
 
   <ItemGroup>

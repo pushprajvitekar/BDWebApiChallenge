@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using FluentValidation.AspNetCore;
 using Application.Courses.Validators;
 using FluentValidation;
+using WebApi.Filters;
 namespace WebApi
 {
     public class Program
@@ -16,7 +17,7 @@ namespace WebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-             builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization();
             //builder.Services.AddAuthorization(auth =>
             //{
             //    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
@@ -47,8 +48,8 @@ namespace WebApi
                             });
             // Add services to the container.
 
-            builder.Services.AddControllers();
-           builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddControllers(o => o.Filters.Add(typeof(ExceptionFilter)));
+            builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCourseMasterValidator>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

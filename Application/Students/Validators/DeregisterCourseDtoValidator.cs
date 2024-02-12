@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Application.Students.Validators
 {
-    public class RegisterCourseDtoValidator : AbstractValidator<RegisterCourseDto>
+    public class DeregisterCourseDtoValidator : AbstractValidator<DeregisterCourseDto>
     {
-        public RegisterCourseDtoValidator()
+        public DeregisterCourseDtoValidator()
         {
             RuleFor(c => c.CourseId).NotEmpty().GreaterThan(0);
         }

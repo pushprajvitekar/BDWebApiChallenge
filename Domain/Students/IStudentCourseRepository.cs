@@ -6,10 +6,11 @@ namespace Domain.Students
 {
     public interface IStudentCourseRepository
     {
-        int Add(StudentCourse studentCourse);
-        void Delete(StudentCourse course);
-        StudentCourse? GetById(int id);
-
-        IList<Course> GetAll(StudentCourseFilter? filter = null, SortingPaging? sortingPaging = null);
+        int Add(CourseRegistration courseRegistration);
+        int Delete(CourseRegistration courseRegistration);
+        CourseRegistration? GetById(int studentId, int id);
+        IList<CourseRegistration> GetAll(int studentId,RegisteredCourseFilter? filter = null, SortingPaging? sortingPaging = null);
+        IList<Course> GetAll(AvailableCourseFilter? filter = null, SortingPaging? sortingPaging = null);
+        Course? GetCourseById(int id);
     }
 }

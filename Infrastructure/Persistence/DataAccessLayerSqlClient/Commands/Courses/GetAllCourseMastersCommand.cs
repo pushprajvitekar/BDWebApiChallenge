@@ -76,11 +76,11 @@ namespace DataAccessLayerSqlClient.Commands.Courses
         protected override CourseMaster Transform(IDataReader reader)
         {
             var courseId = Convert.ToInt32(reader[nameof(CourseMaster.Id)]);
-            var courseName = Convert.ToString(reader[nameof(CourseMaster.Name)]) ?? "Unknown";
+            var courseName = Convert.ToString(reader[nameof(CourseMaster.Name)]) ?? Constants.Unknown;
             var courseDesc = Convert.ToString(reader[nameof(CourseMaster.Description)]);
             var categoryName = Convert.ToString(reader["CourseCategoryName"]);
             var categoryId = Convert.ToInt32(reader["CourseCategoryId"]);
-            var category = new CourseCategory(categoryId, categoryName ?? "Unknown");
+            var category = new CourseCategory(categoryId, categoryName ?? Constants.Unknown);
             return new CourseMaster(id: courseId, name: courseName, courseCategory: category, description: courseDesc);
         }
     }

@@ -103,54 +103,30 @@ namespace WebApi.Controllers
         [HttpPost("{id}/slots")]
         public async Task<IActionResult> CreateCourseSlot(int id, [FromBody] CreateCourseDto createCourse)
         {
-            try
+            if (createCourse == null)
             {
-                if (createCourse == null)
-                {
-                    return BadRequest();
-                }
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-                var res = await mediator.Send(new CreateCourseSlotRequest(id, createCourse));
-                return CreatedAtAction(nameof(GetCourses), new { id = res });
+                return BadRequest();
             }
-            catch (DomainException dex)
+            if (!ModelState.IsValid)
             {
-                return StatusCode(dex.ErrorCode, dex.Message);
+                return BadRequest();
             }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Error");
-            }
+            var res = await mediator.Send(new CreateCourseSlotRequest(id, createCourse));
+            return CreatedAtAction(nameof(GetCourses), new { id = res });
+
         }
 
         // PUT api/<CoursesController>/5/slots/1
         [HttpPut("{id}/slots/{courseid}")]
         public async Task<IActionResult> Put(int id, int courseid, [FromBody] UpdateCourseDto updateCourse)
         {
-            try
+            if (updateCourse == null)
             {
-                if (updateCourse == null)
-                {
-                    return BadRequest();
-                }
-                var res = await mediator.Send(new UpdateCourseSlotRequest(id, courseid, updateCourse));
-                return AcceptedAtAction(nameof(GetCourses), new { id = res });
+                return BadRequest();
             }
-            catch (ArgumentException aex)
-            {
-                return BadRequest(aex.Message);
-            }
-            catch (DomainException dex)
-            {
-                return StatusCode(dex.ErrorCode, dex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Error");
-            }
+            var res = await mediator.Send(new UpdateCourseSlotRequest(id, courseid, updateCourse));
+            return AcceptedAtAction(nameof(GetCourses), new { id = res });
+
         }
 
         // DELETE api/<CoursesController>/5/slots/1

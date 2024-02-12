@@ -14,25 +14,40 @@ namespace DataAccessLayerSqlClient.Repositories
         {
             this.connectionString = connectionString;
         }
-        public int Add(StudentCourse studentCourse)
+        public int Add(CourseRegistration courseRegistration)
         {
-            throw new NotImplementedException();
+            var cmd = new InsertCourseRegistrationCommand(courseRegistration);
+            return ErrorHandlerDecorator.TryCatch(() => cmd.ExecuteScalar(connectionString));
         }
 
-        public void Delete(StudentCourse course)
+        public int Delete(CourseRegistration courseRegistration)
         {
-            throw new NotImplementedException();
+            var cmd = new DeleteCourseRegistrationCommand(courseRegistration);
+            return ErrorHandlerDecorator.TryCatch(() => cmd.ExecuteNonQuery(connectionString));
         }
 
-        public IList<Course> GetAll(StudentCourseFilter? filter = null, SortingPaging? sortingPaging = null)
+        public IList<Course> GetAll(AvailableCourseFilter? filter = null, SortingPaging? sortingPaging = null)
         {
             var cmd = new GetAvailableCoursesCommand(filter, sortingPaging);
             return ErrorHandlerDecorator.TryCatch(cmd.ExecuteReader(connectionString).ToList);
         }
-
-        public StudentCourse? GetById(int id)
+        public Course? GetCourseById(int id)
         {
-            throw new NotImplementedException();
+            var cmd = new GetAvailableCoursesCommand(new AvailableCourseFilter() { CourseId = id });
+            return ErrorHandlerDecorator.TryCatch(cmd.ExecuteReader(connectionString).FirstOrDefault);
         }
+        public IList<CourseRegistration> GetAll(int studentId, RegisteredCourseFilter? filter = null, SortingPaging? sortingPaging = null)
+        {
+            var cmd = new GetRegisteredCoursesCommand(studentId, filter, sortingPaging);
+            return ErrorHandlerDecorator.TryCatch(cmd.ExecuteReader(connectionString).ToList);
+        }
+
+        public CourseRegistration? GetById(int studentId, int id)
+        {
+            var cmd = new GetRegisteredCoursesCommand(studentId, new RegisteredCourseFilter { Id = id });
+            return ErrorHandlerDecorator.TryCatch(cmd.ExecuteReader(connectionString).FirstOrDefault);
+        }
+
+
     }
 }

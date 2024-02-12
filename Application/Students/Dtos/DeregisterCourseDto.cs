@@ -8,5 +8,6 @@ namespace Application.Students.Dtos
 {
     public class DeregisterCourseDto
     {
+        public int CourseId { get; set; }
     }
 }
