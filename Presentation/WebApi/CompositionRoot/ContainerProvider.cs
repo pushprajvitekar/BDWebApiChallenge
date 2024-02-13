@@ -8,6 +8,7 @@ using Domain.Students;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using WebApi.Auth;
+using WebApi.Auth.JwtService;
 
 namespace WebApi.CompositionRoot
 {

@@ -1,24 +1,30 @@
 ﻿using Application.Students.Commands.RegisterCourse;
 using Application.Students.Dtos;
 using Application.Students.Queries.GetAvailableCourses;
+using Azure;
 using Domain.Common;
 using Domain.Students.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata;
+using WebApi.Auth;
 
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize(Roles = $"{Roles.Admin},{Roles.Student}")]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Student}")]
     public class StudentsController : ControllerBase
     {
         private readonly IMediator mediator;
+        private readonly IAuthorizationService authorizationService;
 
-        public StudentsController(IMediator mediator)
+        public StudentsController(IMediator mediator, IAuthorizationService authorizationService)
         {
             this.mediator = mediator;
+            this.authorizationService = authorizationService;
         }
 
         [HttpGet("courses")]
@@ -35,8 +41,17 @@ namespace WebApi.Controllers
         [Route("{id}/courses", Name = "GetStudentCourses")]
         public async Task<IActionResult> GetStudentCourses(int id, [FromQuery] RegisteredCourseFilter? filter, [FromQuery] SortingPaging? sortingPaging)
         {
-            var res = await mediator.Send(new GetRegisteredCoursesRequest(id, filter, sortingPaging));
-            return Ok(res);
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, id, StudentRequirement.SameStudent);
+
+            if (authorizationResult.Succeeded)
+            {
+                var res = await mediator.Send(new GetRegisteredCoursesRequest(id, filter, sortingPaging));
+                return Ok(res);
+            }
+            else
+            {
+                return User.Identity?.IsAuthenticated == true ? new ForbidResult() : new ChallengeResult();
+            }
         }
 
 
@@ -52,9 +67,20 @@ namespace WebApi.Controllers
             {
                 return BadRequest();
             }
-            var res = await mediator.Send(new RegisterCourseRequest(id, courseDto));
-            return CreatedAtRoute($"GetStudentCourses", new { id },res);
-            //return Created(new Uri($"/{id}/courses", UriKind.Relative), res);
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, id, StudentRequirement.SameStudent);
+
+            if (authorizationResult.Succeeded)
+            {
+
+                var res = await mediator.Send(new RegisterCourseRequest(id, courseDto));
+                return CreatedAtRoute($"GetStudentCourses", new { id }, res);
+                //return Created(new Uri($"/{id}/courses", UriKind.Relative), res);
+            }
+            else
+            {
+                return User.Identity?.IsAuthenticated == true ? new ForbidResult() : new ChallengeResult();
+            }
+
         }
 
 
@@ -68,9 +94,19 @@ namespace WebApi.Controllers
             {
                 return BadRequest();
             }
-            var res = await mediator.Send(new DeregisterCourseRequest(id, courseDto));
-            // return AcceptedAtRoute($"GetStudentCourses", new { id });
-            return Ok(res);
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, id, StudentRequirement.SameStudent);
+
+            if (authorizationResult.Succeeded)
+            {
+
+                var res = await mediator.Send(new DeregisterCourseRequest(id, courseDto));
+                // return AcceptedAtRoute($"GetStudentCourses", new { id });
+                return Ok(res);
+            }
+            else
+            {
+                return User.Identity?.IsAuthenticated == true ? new ForbidResult() : new ChallengeResult();
+            }
         }
     }
 }

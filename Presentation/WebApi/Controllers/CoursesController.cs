@@ -6,6 +6,7 @@ using Domain.Common;
 using Domain.Courses.Queries;
 using Domain.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Transactions;
@@ -15,7 +16,7 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = $"{Roles.CourseManager},{Roles.Admin}")]
+    [Authorize(Roles = $"{Roles.CourseManager},{Roles.Admin}")]
     public class CoursesController : ControllerBase
     {
         private readonly IMediator mediator;

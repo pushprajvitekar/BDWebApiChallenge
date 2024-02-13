@@ -1,10 +1,8 @@
-﻿using Domain.Common;
-
-namespace Domain.Courses.Queries
+﻿namespace Domain.Courses.Queries
 {
     public class CourseFilter
     {
-        public CourseFilter(int? id = null, FilterDuration? courseDuration = null, FilterDuration? registrationWindow = null)
+        public CourseFilter(int? id = null, DurationFilter? courseDuration = null, DurationFilter? registrationWindow = null)
         {
             Id = id;
             CourseDuration = courseDuration;
@@ -15,7 +13,7 @@ namespace Domain.Courses.Queries
             
         }
         public int? Id { get; }
-        public FilterDuration? CourseDuration { get; }
-        public FilterDuration? RegistrationWindow { get; }
+        public DurationFilter? CourseDuration { get; }
+        public DurationFilter? RegistrationWindow { get; }
     }
 }

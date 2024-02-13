@@ -1,13 +1,20 @@
 ﻿using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using NLog;
 
 namespace WebApi.Filters
 {
     public class ExceptionFilter : IExceptionFilter
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public ExceptionFilter()
+        {
+        }
         public void OnException(ExceptionContext context)
         {
+            Logger?.Error(context.Exception, context.Exception.Message);
             switch (context.Exception)
             {
                 case ArgumentException:
@@ -19,7 +26,7 @@ namespace WebApi.Filters
                 case InfrastructureException:
                     var iex = context.Exception as DomainException;
                     var scode = iex?.ErrorCode ?? StatusCodes.Status500InternalServerError;
-                    context.Result = new ObjectResult(iex?.Message ?? "Infrastucture error") {StatusCode= scode };
+                    context.Result = new ObjectResult("Infrastucture error") {StatusCode= scode };
                     break;
                 case DomainException:
                     var dex = context.Exception as DomainException;

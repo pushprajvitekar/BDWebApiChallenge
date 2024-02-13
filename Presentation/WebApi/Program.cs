@@ -10,6 +10,9 @@ using FluentValidation.AspNetCore;
 using Application.Courses.Validators;
 using FluentValidation;
 using WebApi.Filters;
+using NLog.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using WebApi.Auth;
 namespace WebApi
 {
     public class Program
@@ -17,18 +20,15 @@ namespace WebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddAuthorization();
-            //builder.Services.AddAuthorization(auth =>
-            //{
-            //    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-            //        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
-            //        .RequireAuthenticatedUser().Build());
-            //});
-            //builder.Services.AddAuthentication(a =>
-            //{
-            //    a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    a.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //})
+            //configure logging
+            builder.Services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.AddNLog();
+            });
+            builder.Services.AddAuthorization(options =>
+                 options.AddPolicy(PolicyName.SameStudentPolicy, policy => policy.Requirements.Add(new SameStudentAuthorizationRequirement())));
+            builder.Services.AddSingleton<IAuthorizationHandler, SameStudentAuthorizationHandler>();
             builder.Services.AddAuthentication()
             .AddJwtBearer(o =>
                             {
@@ -79,7 +79,12 @@ namespace WebApi
         }
     });
             });
+
+         
             builder.Services.AddHttpContextAccessor();
+            //  builder.Services.AddAntiforgery();
+
+
             builder.Services.RegisterTypes(builder.Configuration);
 
 
